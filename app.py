@@ -8,6 +8,7 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 from mediapipe.framework.formats import landmark_pb2
+
 def calculate_angle(a, b, c):
     a = np.array(a)
     b = np.array(b)
@@ -17,6 +18,8 @@ def calculate_angle(a, b, c):
     if angle > 180.0:
         angle = 360 - angle
     return round(angle, 1)
+
+
 LR=int(input('''Are you on the left side or the right side?
 Enter 1 for right and 0 for left:'''))
 while LR>=2:
@@ -30,9 +33,11 @@ def video_processer(video_source):
     pre_2=0
     pre_1a=0
     pre_2a=0
-    feedback=[]
+    feedback=[] #this is what will store the poses
+    #standard pose
+    #lunge pose
     mpDraw = mp.solutions.drawing_utils
-    model_path = "pose_landmark_full.task"
+    model_path = "pose_landmarker_full.task"
     num_poses = 2
     min_pose_detection_confidence = 0.5
     min_pose_presence_confidence = 0.5
@@ -70,6 +75,7 @@ def video_processer(video_source):
             for person in range(len(pose_landmarks_list)):
                 noses.append(pose_landmarks_list[person][0].x)
             noses.sort()
+            #person is for each fencer
             for person in range(len(pose_landmarks_list)):
                 pose_landmarks = landmark_pb2.NormalizedLandmarkList()
                 pose_landmarks.landmark.extend([
@@ -83,27 +89,63 @@ def video_processer(video_source):
                 if (pose_landmarks_list[person][0].x == noses[LR]):
                     hip = pose_landmarks_list[person][23]
                     ankle = pose_landmarks_list[person][27]
+
+                    #left knee
                     knee = pose_landmarks_list[person][25]
+                    #right knee
+                    knee_right = pose_landmarks_list[person][26]
+
+                    #for player one (or YOU)
+                    #left knee angle
                     angle=calculate_angle((hip.x, hip.y), (knee.x, knee.y), (ankle.x, ankle.y))
+                    #right knee angle
+                    angle_right=calculate_angle((hip.x, hip.y), (knee_right.x, knee_right.y), (ankle.x, ankle.y))
+                    
+
+                    #checking for duck
+                    #duck for YOU (not your opponent)
+                    #could probably just use angle var
+                    if angle < 90 and angle_right < 90:
+                        feedback.append("You did a duck")
+
+
                     if 90<angle:
                         feedback.append("You did a lunge")
+
                     arm_y=pose_landmarks_list[person][16].y
                     if arm_y-after_y>0.1:
                         feedback.append("You did a parry")
                     after_y=arm_y
+                    #right knee
                     knee_1=pose_landmarks_list[person][26].x
+                    #left knee
                     knee_2=pose_landmarks_list[person][25].x
+
                     if knee_1<knee_2 and pre_1>pre_2:
                         feedback.append("You did a flech")
                     if knee_1>knee_2 and pre_1<pre_2:
                         feedback.append("You did a flech")
+
                     pre_1=knee_1
                     pre_2=knee_2
                     mpDraw.draw_landmarks(frame, pose_landmarks, mp.solutions.pose.POSE_CONNECTIONS, mp.solutions.drawing_styles.get_default_pose_landmarks_style())
+                    
+                    #opponents stuff (player 2)
                     hipa = pose_landmarks_list[person][23]
                     anklea = pose_landmarks_list[person][27]
+                    #left knee
                     kneea = pose_landmarks_list[person][25]
+                    #right knee
+                    kneea_right = pose_landmarks_list[person][26]
+                    #left knee angle
                     anglea=calculate_angle((hipa.x, hipa.y), (kneea.x, kneea.y), (anklea.x, anklea.y))
+                    #right knee angle
+                    anglea_right=calculate_angle((hipa.x, hipa.y), (kneea_right.x, kneea_right.y), (anklea.x, anklea.y))
+
+                    #checking for duck (player 2)
+                    if anglea < 90 and anglea_right < 90:
+                        feedback.append("Your oponent ducked")
+
                     if 90<anglea:
                         feedback.append("Your oponent lunged")
                     arm_ya=pose_landmarks_list[person][16].y
@@ -119,13 +161,39 @@ def video_processer(video_source):
                     pre_1a=knee_1a
                     pre_2a=knee_2a
                     mpDraw.draw_landmarks(frame, pose_landmarks, mp.solutions.pose.POSE_CONNECTIONS, mp.solutions.drawing_styles.get_default_pose_landmarks_style())
-                    print(pose_landmarks_list[person][1].x)
+                    #this is printing pose landmark coords
+                    # print(pose_landmarks_list[person][1].x)
             output.write(frame)
         else:
             print("Stream disconnected")
             break
     cap.release()
     cv2.destroyAllWindows()
+
+
+    
+    #clearing file for new output
+    with open("feedback.txt", 'w') as file:
+        file.write("")
+    file.close()
+
+    #now writing to file after its cleared
+    with open("feedback.txt", 'w') as file:
+        for line in feedback:
+            file.write(str(line) + "\n")
+        # file.write(feedback)
+        file.close()
+    
+    print("\n\nDONE WRITING\n\n")
+
     return feedback
+
 if __name__ == '__main__':
   name.run(host='0.0.0.0')
+  
+
+
+#   video_processer("Sam_video_trim_shorter.mp4")
+
+  video_processer("Sam_video_trim.mp4")
+
