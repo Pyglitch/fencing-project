@@ -1,0 +1,13 @@
+TODO: ask Victor about adding sword tracking to pose landmarks
+1st goal 
+
+EPEE stlye fencing (french style)
+
+add a custom landmark for foil
+	foil comes out from dominant hand
+improve flech detection
+
+track the pose RIGHT before the score
+	use the text file containing all the poses that were detected
+
+write poses to text file instead of just a list
