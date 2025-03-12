@@ -1,0 +1,29 @@
+step 0:
+fixin up imports
+
+step 1:
+completed
+modify prints to write pose to text file
+
+step 2:
+only write pose when it changes?
+
+step 3:
+implement more pose tracking:
+en garde pose
+
+
+duck pose
+	knee angles may become acute
+	and also y values for head will decrease
+
+
+
+	3.1:
+	if fencer *returns* to en garde (after a lunge etc),
+	then point was scored
+	fencer must be in en garde AND before the starting line
+		big chance that fencer may go from lunge to en garde WITHOUT scoring a point
+note:
+line for starting position is fixed distance
+this can be used to help track if fencer is resetting to en garde maybe
