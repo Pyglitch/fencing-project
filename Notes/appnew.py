@@ -87,27 +87,32 @@ def video_processer(video_source):
                 if len(noses)==1 or len(noses)==0:
                     continue
                 if (pose_landmarks_list[person][0].x == noses[LR]):
+                    
+                    #stuff for player 1
+                    #left hip
                     hip = pose_landmarks_list[person][23]
+                    #right hip
+                    hip_right = pose_landmarks_list[person][24]
+                    #left ankle
                     ankle = pose_landmarks_list[person][27]
-
+                    #right ankle
+                    ankle_right = pose_landmarks_list[person][28]
                     #left knee
                     knee = pose_landmarks_list[person][25]
                     #right knee
                     knee_right = pose_landmarks_list[person][26]
-
-                    #for player one (or YOU)
+                    
+                    #angles
                     #left knee angle
                     angle=calculate_angle((hip.x, hip.y), (knee.x, knee.y), (ankle.x, ankle.y))
                     #right knee angle
-                    angle_right=calculate_angle((hip.x, hip.y), (knee_right.x, knee_right.y), (ankle.x, ankle.y))
+                    angle_right=calculate_angle((hip_right.x, hip_right.y), (knee_right.x, knee_right.y), (ankle_right.x, ankle_right.y))
                     
-
                     #checking for duck
-                    #duck for YOU (not your opponent)
+                    #duck for YOU (or player 1)
                     #could probably just use angle var
                     if angle < 90 and angle_right < 90:
                         feedback.append("You did a duck")
-
 
                     if 90<angle:
                         feedback.append("You did a lunge")
@@ -125,14 +130,21 @@ def video_processer(video_source):
                         feedback.append("You did a flech")
                     if knee_1>knee_2 and pre_1<pre_2:
                         feedback.append("You did a flech")
-                        
+
                     pre_1=knee_1
                     pre_2=knee_2
                     mpDraw.draw_landmarks(frame, pose_landmarks, mp.solutions.pose.POSE_CONNECTIONS, mp.solutions.drawing_styles.get_default_pose_landmarks_style())
                     
+
                     #opponents stuff (player 2)
+                    #left hip
                     hipa = pose_landmarks_list[person][23]
+                    #right hip
+                    hipa_right = pose_landmarks_list[person][24]
+                    #left ankle
                     anklea = pose_landmarks_list[person][27]
+                    #right ankle
+                    anklea_right = pose_landmarks_list[person][28]
                     #left knee
                     kneea = pose_landmarks_list[person][25]
                     #right knee
@@ -140,7 +152,7 @@ def video_processer(video_source):
                     #left knee angle
                     anglea=calculate_angle((hipa.x, hipa.y), (kneea.x, kneea.y), (anklea.x, anklea.y))
                     #right knee angle
-                    anglea_right=calculate_angle((hipa.x, hipa.y), (kneea.x, kneea.y), (anklea.x, anklea.y))
+                    anglea_right=calculate_angle((hipa_right.x, hipa_right.y), (kneea_right.x, kneea_right.y), (anklea_right.x, anklea_right.y))
 
                     #checking for duck (player 2)
                     if anglea < 90 and anglea_right < 90:
@@ -191,8 +203,9 @@ def video_processer(video_source):
 if __name__ == '__main__':
   name.run(host='0.0.0.0')
   
-#   video_processer("Sam_video_trim.mp4")
 
-#  video_processer("Sam_video_trim_shorter.mp4")
-  video_processer("duck_video")
-# print(video_processer("Sam_video_trim.mp4"))
+
+#   video_processer("Sam_video_trim_shorter.mp4")
+
+  video_processer("Sam_video_trim.mp4")
+

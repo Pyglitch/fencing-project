@@ -1,0 +1,61 @@
+detecting score
+	https://encord.com/blog/realtime-text-recognition-with-tesseract-using-opencv/
+	text detecting whats on scoreboard
+		maybe above a certain
+		score onlu goes from 0 to 15
+
+camera may pan
+	may need to have it re-detect it
+
+
+how to detect if a point was made
+	just if the score changes
+
+
+conditions for scoring
+	players slow down
+	numbers change
+	blade tip collision
+		how to check if blade collides with other player?
+			
+
+is it possible to track two different skeletons with mediapipe?
+	just ask AI again and check out the other package
+		double check python versions and so on
+	possibly track one player at a time
+		maybe store all previous player's blade tip points
+		then use those coordinates in conjunction with next player tracking
+
+
+
+
+		def check_pose(landmarks, frame):
+   
+
+                    
+    #left
+    hip  = landmarks[mp.solutions.pose.PoseLandmark.LEFT_HIP]
+    print(hip)
+    # print(str(hip))
+    ankle = landmarks[mp.pose.solutions.PoseLandmark.LEFT_ANKLE]
+    knee = landmarks[mp.pose.solutions.PoseLandmark.LEFT_KNEE]
+
+    #right
+    hip_right  = landmarks[mp.pose.solutions.PoseLandmark.RIGHT_HIP]
+    ankle_right = landmarks[mp.pose.solutions.PoseLandmark.RIGHT_ANKLE]
+    knee_right = landmarks[mp.pose.solutions.PoseLandmark.RIGHT_KNEE]
+
+    #left knee angle
+    angle=calculate_angle((hip.x, hip.y), (knee.x, knee.y), (ankle.x, ankle.y))
+    #right knee angle
+    angle_right=calculate_angle((hip_right.x, hip_right.y), (knee_right.x, knee_right.y), (ankle_right.x, ankle_right.y))
+    
+    # print(angle)
+    
+    
+    #duck
+    # if angle < 90 and angle_right < 90:
+    #     if var1!="duck":
+    #         var1="duck"
+    #         feedback.append("You did a duck. Frame "+str(frame))
+    

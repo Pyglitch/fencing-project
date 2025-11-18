@@ -1,0 +1,27 @@
+detecting score
+	https://encord.com/blog/realtime-text-recognition-with-tesseract-using-opencv/
+	text detecting whats on scoreboard
+		maybe above a certain
+		score onlu goes from 0 to 15
+
+camera may pan
+	may need to have it re-detect it
+
+
+how to detect if a point was made
+	just if the score changes
+
+
+conditions for scoring
+	players slow down
+	numbers change
+	blade tip collision
+		how to check if blade collides with other player?
+			
+
+is it possible to track two different skeletons with mediapipe?
+	just ask AI again and check out the other package
+		double check python versions and so on
+	possibly track one player at a time
+		maybe store all previous player's blade tip points
+		then use those coordinates in conjunction with next player tracking

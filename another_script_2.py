@@ -1,0 +1,5 @@
+import importlib
+import multi_fencing_pose
+importlib.reload(multi_fencing_pose)
+
+multi_fencing_pose.process_video_with_yolo_blazepose("flech_Sam.mp4")

@@ -1,0 +1,38 @@
+3/12
+
+another step:
+add blade tracking from the hand calculations
+
+
+update flech pose recognition
+	use the wrist/arm/shoulder landmarks (maybe both?)
+	needs to be mostly straight for flech
+
+
+tracking foil angle
+(left hand)
+wrist_left = 15
+pinky_left = 17
+index_left = 19
+thumb_left = 21
+
+right hand)
+wrist_right = 16
+pinky_right = 18
+index_right = 20
+thumb_right = 22
+
+
+
+
+2) how to automate getting pic of the pose that happened right before they score a point
+
+should have an algorithm that can scan feedback.txt to find the beginning frame of a ceratin pose
+
+2 different grips
+	each has slightly different length
+
+
+larger challenges:
+how to detect score
+how to detect fencing foil
